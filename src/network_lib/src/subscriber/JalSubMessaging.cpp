@@ -703,7 +703,7 @@ std::string Message::getDigest() const
 
 // TODO: This is slightly dangerous as the reference could potentially outlive
 // the class and become dangling. Consider alternatives or return a copy
-std::map<std::string, std::string>& MessageBase::getHeaders()
+std::map<std::string, std::string, MessageBase::CaseInsensitiveCmp>& MessageBase::getHeaders()
 {
 	return headers;
 }

@@ -51,15 +51,16 @@ class MissingHeaderException : public std::exception
 
 class MessageBase
 {
-	private:
-	// Data
-	std::map<std::string, std::string> headers;
-
-	// Functions
-	//
 	public:
 	// Data
-	//
+	struct CaseInsensitiveCmp
+	{
+		bool operator()(const std::string& a, const std::string& b) const noexcept
+		{
+			return ::strcasecmp(a.c_str(), b.c_str()) < 0;
+		}
+	};
+
 	// Functions
 	void addHeader(std::string key, std::string value);
 
@@ -67,7 +68,11 @@ class MessageBase
 
 	// TODO: This is slightly dangerous as the reference could potentially outlive
 	// the class and become dangling. Consider alternatives or return a copy
-	std::map<std::string, std::string>& getHeaders();
+	std::map<std::string, std::string, CaseInsensitiveCmp>& getHeaders();
+
+	private:
+	// Data
+	std::map<std::string, std::string, CaseInsensitiveCmp> headers;
 };
 
 class Response : public MessageBase
